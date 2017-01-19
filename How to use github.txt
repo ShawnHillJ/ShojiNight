@@ -1,0 +1,13 @@
+If you are using the command line, these commands will be helpful.
+
+To make changes to the repository from your end, use
+
+  git add .
+
+to add all changes on your side, then use
+
+  git commit -m "your text here"
+
+  git push origin master
+
+that will make your changes public.
