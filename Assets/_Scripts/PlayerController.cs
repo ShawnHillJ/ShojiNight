@@ -12,10 +12,10 @@ public class PlayerController : MonoBehaviour {
     private float last_attack;
     private int combo;
 
-    public float gravity = 9.8f;
+    public float gravity = 4f;
     public float speed = 3.0f;
     public float turn = 0.5f;
-    public float jump = 30f;
+    public float jump = 20f;
 
     public float move_ver = 0f;
 
@@ -57,12 +57,13 @@ public class PlayerController : MonoBehaviour {
         if (character.isGrounded)
         {
             move_ver = 0;
-            anim.SetBool("IsJumping", false);
             if (Input.GetAxis("Jump") > 0)
             {
                 move_ver = jump;
                 anim.SetBool("IsJumping", true);
             }
+            else
+                anim.SetBool("IsJumping", false);
         }
         move_ver -= gravity;
         movement.y = move_ver;
