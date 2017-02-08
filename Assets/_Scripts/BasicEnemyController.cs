@@ -17,6 +17,9 @@ public class BasicEnemyController : MonoBehaviour
     //The index of the next point the enemy will travel to
     int nextPoint;
 
+    //Starts off as false - enemy hasn't spotted player.  Becomes znd stays true once the player wanders into enemy sight.
+    private bool spottedPlayer;
+
     //Enemy's animation component
     private Animation enemyAnim;
     //Enemy's CharacterController component
@@ -31,20 +34,18 @@ public class BasicEnemyController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
 
         nextPoint = 0;
+        spottedPlayer = false;
     }
 	
 	void Update ()
     {
         //Hopefully deals with some strange issue where bumping into the player would
         //push it off the ground and make the raycast useless
+        //Will look into further
         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 
-        RaycastHit hit;
-        Ray ray = new Ray(transform.position, transform.forward);
-        //Need to work on giving the enemy a better field of view - something other than Raycast?
-
         //Reacts to player if spotted
-        if (Physics.Raycast(ray, out hit, maxDist) && hit.transform.gameObject == player)
+        if (spottedPlayer == true)
         {
             //Checks if the raycast hit the player.
             Vector3 moveDirection = player.transform.position - transform.position;
@@ -68,23 +69,35 @@ public class BasicEnemyController : MonoBehaviour
         //Patrols otherwise
         else
         {
-            //Moves enemy towards next patrol point and changes animation
-            Vector3 moveDirection = patrolPoints[nextPoint] - transform.position;
-            enemyAnim.CrossFade("Walk");
-            charController.Move(moveDirection.normalized * walkSpeed * Time.deltaTime);
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position, transform.forward);
+            //Need to work on giving the enemy a better field of view - something other than Raycast?
 
-            //Checks if the enemy is close to its next point - exact doesn't work
-            if((transform.position - patrolPoints[nextPoint]).magnitude < 0.1)
+            //Checks for player.
+            if (Physics.Raycast(ray, out hit, maxDist) && hit.transform.gameObject == player)
             {
-                //If it is, the nextPoint is updated to the next index of patrolPoints
-                if (nextPoint == patrolPoints.Length - 1)
+                spottedPlayer = true;
+            }
+            else
+            {
+                //Moves enemy towards next patrol point and changes animation
+                Vector3 moveDirection = patrolPoints[nextPoint] - transform.position;
+                enemyAnim.CrossFade("Walk");
+                charController.Move(moveDirection.normalized * walkSpeed * Time.deltaTime);
+
+                //Checks if the enemy is close to its next point - exact doesn't work
+                if ((transform.position - patrolPoints[nextPoint]).magnitude < 0.1)
                 {
-                    nextPoint = 0;
+                    //If it is, the nextPoint is updated to the next index of patrolPoints
+                    if (nextPoint == patrolPoints.Length - 1)
+                    {
+                        nextPoint = 0;
+                    }
+                    else
+                        nextPoint++;
+                    //Rotates the enemy to face it's next patrol point
+                    transform.rotation = Quaternion.LookRotation(patrolPoints[nextPoint] - transform.position);
                 }
-                else
-                    nextPoint++;
-                //Rotates the enemy to face it's next patrol point
-                transform.rotation = Quaternion.LookRotation(patrolPoints[nextPoint] - transform.position);
             }
         }
     }
