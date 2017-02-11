@@ -47,9 +47,9 @@ public class BasicEnemyController : MonoBehaviour
         //Reacts to player if spotted
         if (spottedPlayer == true)
         {
-            //Checks if the raycast hit the player.
-            Vector3 moveDirection = player.transform.position - transform.position;
             //Rotates the enemy to face the player
+            //y component isn't affected by player to prevent the enemy from turning at weird angles when the player jumps.
+            Vector3 moveDirection = new Vector3(player.transform.position.x - transform.position.x, transform.position.y, player.transform.position.z - transform.position.z);
             transform.rotation = Quaternion.LookRotation(moveDirection);
 
             //Attacks if the player is close enough
@@ -73,7 +73,7 @@ public class BasicEnemyController : MonoBehaviour
             Ray ray = new Ray(transform.position, transform.forward);
             //Need to work on giving the enemy a better field of view - something other than Raycast?
 
-            //Checks for player.
+            //Checks if the raycast hit the player.
             if (Physics.Raycast(ray, out hit, maxDist) && hit.transform.gameObject == player)
             {
                 spottedPlayer = true;
@@ -95,8 +95,10 @@ public class BasicEnemyController : MonoBehaviour
                     }
                     else
                         nextPoint++;
+
                     //Rotates the enemy to face it's next patrol point
-                    transform.rotation = Quaternion.LookRotation(patrolPoints[nextPoint] - transform.position);
+                    Vector3 rotationDir = patrolPoints[nextPoint] - transform.position;
+                    transform.rotation = Quaternion.LookRotation(rotationDir);
                 }
             }
         }
