@@ -21,12 +21,24 @@ public class GhostEnemyController : MonoBehaviour
     //Will delay Update a bit to allow the ghost to perform a "rise" animation.
     private bool hasRisen;
     //The first animation in the animator
-    //(Need to find out a way to get it from the animator itself)
+    //(May need to find out a way to get it from the animator itself)
     public AnimationClip firstAnim;
+    //The attack animation - will attach an event to it so the enemy attacks each time.
+    public AnimationClip attackAnim;
+
+    //Event that will be attached to the attack animation - should allow the enemy to attack in sync with its animation.
+    AnimationEvent attackEvent;
 
 	// Use this for initialization
 	void Start ()
     {
+        attackEvent = new AnimationEvent();
+        //Time into the attack animation where the damage (putting up the collider/trigger) will take place.  The timing can be experimented with.
+        attackEvent.time = 0.3F;
+        attackEvent.functionName = "EnemyMeleeAttack";
+
+        attackAnim.AddEvent(attackEvent);
+
         enemyAnim = GetComponent<Animator>();
         charController = GetComponent<CharacterController>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -70,5 +82,12 @@ public class GhostEnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
         hasRisen = true;
+    }
+
+    void EnemyMeleeAttack()
+    {
+        Debug.Log("Punch");
+        //Put up the collider or trigger to allow the enemy to attack
+        //Take down the collider or trigger after some time - coroutine
     }
 }
