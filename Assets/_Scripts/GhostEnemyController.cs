@@ -29,12 +29,15 @@ public class GhostEnemyController : MonoBehaviour
     //Event that will be attached to the attack animation - should allow the enemy to attack in sync with its animation.
     AnimationEvent attackEvent;
 
+    //The attackBox is the collider child of the enemy.  If the player enters that collider, they can take damage.
+    GameObject attackBox;
+
 	// Use this for initialization
 	void Start ()
     {
         attackEvent = new AnimationEvent();
         //Time into the attack animation where the damage (putting up the collider/trigger) will take place.  The timing can be experimented with.
-        attackEvent.time = 0.3F;
+        attackEvent.time = 0.1F;
         attackEvent.functionName = "EnemyMeleeAttack";
 
         attackAnim.AddEvent(attackEvent);
@@ -42,6 +45,9 @@ public class GhostEnemyController : MonoBehaviour
         enemyAnim = GetComponent<Animator>();
         charController = GetComponent<CharacterController>();
         player = GameObject.FindGameObjectWithTag("Player");
+
+        attackBox = transform.FindChild("EnemyMeleeAttack").gameObject;
+        attackBox.SetActive(false);
 
         //The "ghost" will perform its "rising from ground" animation
         enemyAnim.SetBool("isRisen", true);
@@ -84,10 +90,49 @@ public class GhostEnemyController : MonoBehaviour
         hasRisen = true;
     }
 
-    void EnemyMeleeAttack()
+    //Activates the collider to allow the enemy to attack, then deactivates it after some time.
+    IEnumerator EnemyMeleeAttack()
     {
-        Debug.Log("Punch");
-        //Put up the collider or trigger to allow the enemy to attack
-        //Take down the collider or trigger after some time - coroutine
+        attackBox.SetActive(true);
+        yield return new WaitForSeconds(0.5F);
+        attackBox.SetActive(false);
+    }
+
+    //Will detect if a player's attack hit the enemy.
+    void OnTriggerEnter(Collider other)
+    {
+        //For player melee, an enemy being hit will shut off the player's attack collider
+        if (other.tag.Equals("PlayerMelee"))
+        {
+            //Gets the damage from the Damage class and subtracts it from the enemy's health
+            int minusHealth = other.GetComponent<Damage>().getDamage();
+            if (minusHealth > health)
+            {
+                health = 0;
+                //Place for death animation and Destroy()
+            }
+            else
+            {
+                health -= minusHealth;
+                //Place for "taking damage" animation
+            }
+            Debug.Log(health);
+            other.gameObject.SetActive(false);
+        }
+        //For player ranged, the projectile will be destroyed
+        else if (other.tag.Equals("PlayerRanged"))
+        {
+            int minusHealth = other.GetComponent<Damage>().getDamage();
+            if (minusHealth > health)
+            {
+                health = 0;
+            }
+            else
+            {
+                health -= minusHealth;
+            }
+            Debug.Log(health);
+            Destroy(other.gameObject);
+        }
     }
 }
