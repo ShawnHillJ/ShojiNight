@@ -1,17 +1,41 @@
 fileFormatVersion: 2
-guid: f4c26727e4b55324895eb4b268f153c5
-timeCreated: 1486872723
+guid: 5c40fb88c70e37044b3af8fc67169c67
+timeCreated: 1487555762
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
+    100000: Armature_001
+    100002: Cube_002
+    100004: Eye_L
+    100006: Eye_R
+    100008: //RootNode
+    100010: Horn_L
+    100012: Horn_R
+    100014: Lower_Lip
+    100016: Root
+    100018: Upper_Lip
+    100020: Wisp1
+    100022: Wisp2
+    100024: Wisp3
+    400000: Armature_001
+    400002: Cube_002
+    400004: Eye_L
+    400006: Eye_R
+    400008: //RootNode
+    400010: Horn_L
+    400012: Horn_R
+    400014: Lower_Lip
+    400016: Root
+    400018: Upper_Lip
+    400020: Wisp1
+    400022: Wisp2
+    400024: Wisp3
+    4300000: Cube_002
     7400000: Default Take
+    7400002: Armature_001Action
     9500000: //RootNode
+    13700000: Cube_002
   materials:
     importMaterials: 1
     materialName: 0

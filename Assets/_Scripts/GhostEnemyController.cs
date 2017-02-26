@@ -40,6 +40,7 @@ public class GhostEnemyController : MonoBehaviour
         attackEvent.time = 0.1F;
         attackEvent.functionName = "EnemyMeleeAttack";
 
+        //Note to self: An animation event will be applied to all instances of the clip, not just the one in the animator controller.
         attackAnim.AddEvent(attackEvent);
 
         enemyAnim = GetComponent<Animator>();
@@ -50,7 +51,7 @@ public class GhostEnemyController : MonoBehaviour
         attackBox.SetActive(false);
 
         //The "ghost" will perform its "rising from ground" animation
-        enemyAnim.SetBool("isRisen", true);
+        //enemyAnim.SetBool("isRisen", true);
         hasRisen = false;
 
         float risingTime = firstAnim.length;
@@ -104,6 +105,7 @@ public class GhostEnemyController : MonoBehaviour
         //For player melee, an enemy being hit will shut off the player's attack collider
         if (other.tag.Equals("PlayerMelee"))
         {
+            enemyAnim.SetTrigger("takeDamage");
             //Gets the damage from the Damage class and subtracts it from the enemy's health
             int minusHealth = other.GetComponent<Damage>().getDamage();
             if (minusHealth > health)
@@ -122,6 +124,7 @@ public class GhostEnemyController : MonoBehaviour
         //For player ranged, the projectile will be destroyed
         else if (other.tag.Equals("PlayerRanged"))
         {
+            enemyAnim.SetTrigger("takeDamage");
             int minusHealth = other.GetComponent<Damage>().getDamage();
             if (minusHealth > health)
             {
