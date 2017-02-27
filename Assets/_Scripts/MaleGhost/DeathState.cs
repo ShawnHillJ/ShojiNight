@@ -6,24 +6,24 @@ public class DeathState : IMaleGhostState
 {
     private MaleGhostEnemy enemy;
 
-    private float deathLingerTime;
-    private float timeDead;
+    /*private float deathLingerTime;
+    private float timeDead;*/
 
     public DeathState(MaleGhostEnemy maleGhostEnemy)
     {
         enemy = maleGhostEnemy;
 
-        deathLingerTime = 5F;
-        timeDead = 0F;
+        /*deathLingerTime = 5F;
+        timeDead = 0F;*/
     }
 
     public void UpdateState()
     {
-        timeDead += Time.deltaTime;
+        /*timeDead += Time.deltaTime;
         if (timeDead > deathLingerTime)
         {
             GameObject.Destroy(enemy.gameObject);
-        }
+        }*/
     }
 
     public void OnTriggerEnter(Collider other)

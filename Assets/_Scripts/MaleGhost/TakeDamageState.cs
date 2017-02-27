@@ -66,6 +66,7 @@ public class TakeDamageState : IMaleGhostState
 
     public void ToDeathState()
     {
+        Debug.Log("Dying...");
         enemy.enemyAnim.SetTrigger("dead");
         enemy.enemyState = enemy.deathState;
     }

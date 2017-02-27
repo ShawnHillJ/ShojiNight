@@ -67,6 +67,7 @@ public class ChaseState : IMaleGhostState
 
     public void ToTakeDamageState()
     {
+        enemy.enemyAnim.SetBool("isChasing", false);
         enemy.enemyAnim.SetTrigger("takeDamage");
         enemy.enemyState = enemy.takeDamageState;
     }
