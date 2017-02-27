@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
@@ -78,10 +79,16 @@ public class PlayerController : MonoBehaviour
         
         //Triggers different animations depending on speed (except vertical)
         anim.SetFloat("Speed", movement.magnitude);
-
+        /*
+        if (Input.GetAxis("Fire3") > 0)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(ClosestEnemies()[0].transform.position - transform.position), turn);
+        }
+        else */
         //Rotates the player towards the direction of user-controlled motion (relative to the camera)
         if (movement.magnitude > 0)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), turn);
+
 
         if (character.isGrounded)
         {
@@ -97,6 +104,15 @@ public class PlayerController : MonoBehaviour
         move_ver -= gravity;
         movement.y = move_ver;
         character.Move(movement * Time.deltaTime);
+    }
+    GameObject[] ClosestEnemies ()
+    {
+        GameObject[] targets;
+        targets = GameObject.FindGameObjectsWithTag("Enemy");
+        Vector3 position = transform.position;
+
+        targets.OrderBy(target => (target.transform.position - transform.position).sqrMagnitude);
+        return targets;
     }
     IEnumerator PlayerMeleeTest()
     {
