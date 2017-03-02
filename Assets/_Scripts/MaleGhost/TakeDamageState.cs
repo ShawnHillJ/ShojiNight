@@ -9,6 +9,10 @@ public class TakeDamageState : IMaleGhostState
     private float timeDamaged;
     private float takeDamageClipLength;
 
+    //The direction and speed which the enemy will be knocked back.
+    public Vector3 knockbackDir;
+    public float knockbackSpeed;
+
     public TakeDamageState(MaleGhostEnemy maleGhostEnemy)
     {
         enemy = maleGhostEnemy;
@@ -24,6 +28,10 @@ public class TakeDamageState : IMaleGhostState
         }
         else
         {
+            if(knockbackSpeed > 0.1)
+            {
+                enemy.charController.Move(knockbackDir.normalized * knockbackSpeed * Time.deltaTime);
+            }
             timeDamaged += Time.deltaTime;
 
             if (timeDamaged > takeDamageClipLength)

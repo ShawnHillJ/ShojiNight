@@ -32,23 +32,28 @@ public class ChaseState : IMaleGhostState
         }
     }
 
+    //Checks if the enemy should be taking damage.
     public void OnTriggerEnter(Collider other)
     {
         //For player melee, an enemy being hit will shut off the player's attack collider
-        if (other.tag.Equals("PlayerMelee"))
+        if (other.CompareTag("PlayerMelee") || other.CompareTag("PlayerRanged"))
         {
             //Gets the damage from the Damage class and subtracts it from the enemy's health
             int minusHealth = other.GetComponent<Damage>().getDamage();
             enemy.health -= minusHealth;
-            other.gameObject.SetActive(false);
-            ToTakeDamageState();
-        }
-        //For player ranged, the projectile will be destroyed
-        else if (other.tag.Equals("PlayerRanged"))
-        {
-            int minusHealth = other.GetComponent<Damage>().getDamage();
-            enemy.health -= minusHealth;
-            GameObject.Destroy(other.gameObject);
+            //Shuts off collider if melee attack.
+            if (other.CompareTag("PlayerMelee"))
+            {
+                other.gameObject.SetActive(false);
+            }
+            //Destroys the projectile that hit the enemy.
+            else
+            {
+                GameObject.Destroy(other.gameObject);
+            }
+            Vector3 moveDirection = new Vector3(other.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, other.transform.position.z - enemy.transform.position.z);
+            enemy.takeDamageState.knockbackDir = -moveDirection;
+            enemy.takeDamageState.knockbackSpeed = other.GetComponent<Damage>().getKnockback();
             ToTakeDamageState();
         }
     }
