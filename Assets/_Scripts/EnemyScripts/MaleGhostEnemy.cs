@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MaleGhostEnemy : MonoBehaviour
 {
+    /*
+    //This is a basic melee enemy.  Currently, it will simply melee attack the player until it drops.
+
     //Enemy's health
     public int health;
     //The speed at which the enemy will chase the player.
@@ -31,7 +34,7 @@ public class MaleGhostEnemy : MonoBehaviour
     //The attackBox is the collider child of the enemy.  If the player enters that collider, they can take damage.
     GameObject attackBox;
 
-    [HideInInspector] public IMaleGhostState enemyState;
+    [HideInInspector] public IEnemyState enemyState;
     [HideInInspector] public RisingState risingState;
     [HideInInspector] public ChaseState chaseState;
     [HideInInspector] public AttackState attackState;
@@ -40,6 +43,13 @@ public class MaleGhostEnemy : MonoBehaviour
 
     private void Awake()
     {
+        /*GameObject test = this.gameObject;
+        Debug.Log(test);
+        Debug.Log(test.GetType());*/
+        //Debug.Log(this);
+
+        /*string classname = this.GetType().ToString();
+
         risingState = new RisingState(this);
         chaseState = new ChaseState(this);
         attackState = new AttackState(this);
@@ -66,10 +76,10 @@ public class MaleGhostEnemy : MonoBehaviour
         attackBox.SetActive(false);
 
         enemyState = risingState;
-	}
+	}*/
 	
 	// Update is called once per frame
-	void Update ()
+	/*void Update ()
     {
         enemyState.UpdateState();
 	}
@@ -84,5 +94,27 @@ public class MaleGhostEnemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         enemyState.OnTriggerEnter(other);
-    }
+    }*/
+
+    /*private void Test()
+    {
+        Debug.Log("Success!");
+    }*/
+
+    /*public void setHealth()
+    {
+        health = 0;
+    }*/
+
+    /*public int Health
+    {
+        get
+        {
+            return health;
+        }
+        set
+        {
+            health = value;
+        }
+    }*/
 }

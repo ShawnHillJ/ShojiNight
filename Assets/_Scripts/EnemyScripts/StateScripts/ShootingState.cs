@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState : IMaleGhostState
+public class ShootingState : IEnemyState
 {
-    private MaleGhostEnemy enemy;
+    //Will be a basic shooting behavior.  Enemy will shoot projectile prefabs at the player
+    //Will also move away from player if player gets too close.
 
-    public AttackState(MaleGhostEnemy maleGhostEnemy)
+    private EnemyBehavior enemy;
+
+    public ShootingState(EnemyBehavior newEnemy)
     {
-        enemy = maleGhostEnemy;
+        Debug.Log("Shooting State selected.");
+        enemy = newEnemy;
     }
 
     public void UpdateState()
@@ -16,10 +20,11 @@ public class AttackState : IMaleGhostState
         Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
         enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
 
-        if(moveDirection.magnitude > enemy.attackDistance)
+        if (moveDirection.magnitude > enemy.attackDistance)
         {
             ToChaseState();
         }
+        //else if()
     }
 
     //Checks if the enemy should be taking damage.

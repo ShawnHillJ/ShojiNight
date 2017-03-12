@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMaleGhostState
+public interface IEnemyState
 {
     void UpdateState();
 

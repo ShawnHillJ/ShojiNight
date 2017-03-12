@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RisingState : IMaleGhostState
+public class RisingState : IEnemyState
 {
-    private MaleGhostEnemy enemy;
+    //Performed when the enemy is first triggered.  The enemy will be immune to damage until it has manifested or whatever.
+
+    private EnemyBehavior enemy;
 
     private float timeRising;
     private float risingClipLength;
 
-    public RisingState(MaleGhostEnemy maleGhostEnemy)
+    public RisingState(EnemyBehavior newEnemy)
     {
-        enemy = maleGhostEnemy;
+        enemy = newEnemy;
 
         timeRising = 0F;
         risingClipLength = enemy.risingAnim.length;

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseState : IMaleGhostState
+public class ChaseState : IEnemyState
 {
-    private MaleGhostEnemy enemy;
+    //In this state, the enemy will chase after the player until it is close enough to attack or it takes damage.
 
-    public ChaseState (MaleGhostEnemy maleGhostEnemy)
+    private EnemyBehavior enemy;
+
+    public ChaseState (EnemyBehavior newEnemy)
     {
-        enemy = maleGhostEnemy;
+        enemy = newEnemy;
     }
     
     public void UpdateState()
@@ -67,7 +69,7 @@ public class ChaseState : IMaleGhostState
     {
         enemy.enemyAnim.SetBool("isChasing", false);
         enemy.enemyAnim.SetBool("isAttacking", true);
-        enemy.enemyState = enemy.attackState;
+        enemy.enemyState = enemy.selAttackState;
     }
 
     public void ToTakeDamageState()

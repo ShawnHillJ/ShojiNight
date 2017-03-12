@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TakeDamageState : IMaleGhostState
+public class TakeDamageState : IEnemyState
 {
-    private MaleGhostEnemy enemy;
+    //In this state, the enemy will perform a flinching animation and be immune to attacks
+    //If its health goes below zero, the enemy will die.  Else, it'll go back to attacking or chasing.
+
+    private EnemyBehavior enemy;
 
     private float timeDamaged;
     private float takeDamageClipLength;
@@ -13,9 +16,11 @@ public class TakeDamageState : IMaleGhostState
     public Vector3 knockbackDir;
     public float knockbackSpeed;
 
-    public TakeDamageState(MaleGhostEnemy maleGhostEnemy)
+    public TakeDamageState(EnemyBehavior newEnemy)
     {
-        enemy = maleGhostEnemy;
+        //Debug.Log("Health: " + maleGhostEnemy.Health);
+        enemy = newEnemy;
+        //enemy = maleGhostEnemy;
 
         takeDamageClipLength = enemy.takeDamageAnim.length;
     }
@@ -64,7 +69,7 @@ public class TakeDamageState : IMaleGhostState
     {
         timeDamaged = 0F;
         enemy.enemyAnim.SetBool("isAttacking", true);
-        enemy.enemyState = enemy.attackState;
+        enemy.enemyState = enemy.selAttackState;
     }
 
     public void ToTakeDamageState()
