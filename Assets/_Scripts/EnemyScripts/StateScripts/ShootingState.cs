@@ -24,7 +24,11 @@ public class ShootingState : IEnemyState
         {
             ToChaseState();
         }
-        //else if()
+        //Some values can be experimented with
+        else if (moveDirection.magnitude < enemy.attackDistance / 4)
+        {
+            enemy.charController.Move(-moveDirection.normalized * (enemy.chaseSpeed/4) * Time.deltaTime);
+        }
     }
 
     //Checks if the enemy should be taking damage.

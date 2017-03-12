@@ -27,7 +27,8 @@ public class ProjectileController : MonoBehaviour
 	//Moves the projectile in the direction of Vector3 moveDirection
 	void Update ()
     {
-        gameObject.transform.Translate(Time.deltaTime * moveSpeed * moveDirection.x, 0, Time.deltaTime * moveSpeed * moveDirection.z);
+        //gameObject.transform.Translate(Time.deltaTime * moveSpeed * moveDirection.x, 0, Time.deltaTime * moveSpeed * moveDirection.z);
+        gameObject.transform.Translate(Time.deltaTime * Vector3.forward);
         //charControl.Move(moveDirection.normalized * moveSpeed * Time.deltaTime);
 
         //Destroys the projectile after it travels a certain distance
