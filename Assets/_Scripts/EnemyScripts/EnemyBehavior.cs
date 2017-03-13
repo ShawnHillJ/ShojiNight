@@ -39,7 +39,7 @@ public class EnemyBehavior : MonoBehaviour
     AnimationEvent attackEvent;
 
     //The attackBox is the collider child of the enemy.  If the player enters that collider, they can take damage.
-    GameObject attackBox;
+    public GameObject attackBox;
 
     [HideInInspector]
     public IEnemyState enemyState;
