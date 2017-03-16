@@ -65,6 +65,7 @@ public class EnemyBehavior : MonoBehaviour
     //private IEnemyState selTakeDamageState;
     //private IEnemyState selDeathState;
 
+    private bool isDead;
 
     private void Awake()
     {
@@ -118,6 +119,8 @@ public class EnemyBehavior : MonoBehaviour
         //attackBox.SetActive(false);
 
         enemyState = risingState;
+
+        isDead = false;
     }
 
     // Update is called once per frame
@@ -145,5 +148,17 @@ public class EnemyBehavior : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         enemyState.OnTriggerEnter(other);
+    }
+
+    public bool IsDead
+    {
+        get
+        {
+            return isDead;
+        }
+        set
+        {
+            isDead = value;
+        }
     }
 }

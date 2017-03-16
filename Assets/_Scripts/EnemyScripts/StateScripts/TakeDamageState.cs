@@ -79,8 +79,13 @@ public class TakeDamageState : IEnemyState
 
     public void ToDeathState()
     {
-        Debug.Log("Dying...");
+        //Debug.Log("Dying...");
+        enemy.IsDead = true;
         enemy.enemyAnim.SetTrigger("dead");
+        enemy.GetComponent<CapsuleCollider>().enabled = false;
+        //enemy.charController.detectCollisions isn't working properly...
+        enemy.charController.detectCollisions = false;
+        enemy.charController.enabled = false;
         enemy.enemyState = enemy.deathState;
     }
 }
