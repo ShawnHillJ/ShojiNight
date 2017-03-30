@@ -7,12 +7,18 @@ public class PortalInteract : MonoBehaviour
     //List of enemies associated with the portal
     public GameObject[] enemies;
     //The 3DText object "E"
-    public GameObject ePrompt;
+    //public GameObject ePrompt;
 
     //Is the player close enough to the portal activator
     private bool inPortalRange;
     //Are all of the enemies dead?
     private bool allEnemiesDead;
+
+    //A prefab of a button prompt
+    public GameObject buttonPrefab;
+
+    //GameObject that will indicate when the player can press E to activate the portal.
+    private GameObject ePrompt;
 
 	// Use this for initialization
 	void Start ()
@@ -26,6 +32,10 @@ public class PortalInteract : MonoBehaviour
                 Debug.Log(enemies[i] + " does not have enemy behavior script.");
             }
         }
+
+        ePrompt = Instantiate(buttonPrefab) as GameObject;
+        ePrompt.transform.parent = GameObject.Find("ButtonPrompts").transform;
+        ePrompt.SetActive(false);
 
         inPortalRange = false;
         allEnemiesDead = false;
@@ -45,6 +55,11 @@ public class PortalInteract : MonoBehaviour
                     Destroy(enemies[i]);
                 }
             }
+        }
+        if(inPortalRange)
+        {
+            //Makes the "E" prompt hover over the portal regardless of camera position.
+            ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up);
         }
 	}
 
@@ -68,6 +83,7 @@ public class PortalInteract : MonoBehaviour
         {
             inPortalRange = false;
             ePrompt.SetActive(false);
+            //ePrompt.text.
         }
     }
 
@@ -88,7 +104,7 @@ public class PortalInteract : MonoBehaviour
         //Changes the text color of the "E"
         if(allEnemiesDead)
         {
-            ePrompt.GetComponent<TextMesh>().color = Color.white;
+            ePrompt.GetComponent<UnityEngine.UI.Text>().color = Color.white;
         }
     }
 }
