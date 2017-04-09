@@ -104,15 +104,15 @@ public class PlayerController : MonoBehaviour
         if (character.isGrounded)
         {
 			//Jumping
-            move_ver = 0;
-			if ( Input.GetAxis ( "Jump" ) > 0 ) {
-				move_ver = jump;
-				anim.SetBool ( "IsJumping", true );
-			} 
-			else 
-			{
+            //move_ver = 0;
+			//if ( Input.GetAxis ( "Jump" ) > 0 ) {
+			//	move_ver = jump;
+			//	anim.SetBool ( "IsJumping", true );
+			//} 
+			//else 
+		//	{
 				anim.SetBool ( "IsJumping", false );
-			}
+		///	}
 			//Dashing
 			if ( Input.GetAxis ( "Dash" ) > 0 ) {
 
