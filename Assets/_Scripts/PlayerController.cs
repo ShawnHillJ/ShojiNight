@@ -119,26 +119,27 @@ public class PlayerController : MonoBehaviour
 				if ( Time.time - rolling_last_time > rolling_cooldown_time ) {
 					if ( move_fwd == 1 ) {
 						
-						movement.z += 100;
+						movement.z -= 100;
 						
 
 					} else if ( move_fwd == -1 ) {
 
 
 
-						movement.z -= 100;
+						movement.z += 100;
 						
 					} else if ( move_hor == 1 ) {
 					
-						movement.x += 100;
-					} else if ( move_hor == -1 ) {
 						movement.x -= 100;
+					} else if ( move_hor == -1 ) {
+						movement.x += 100;
 					}
 					rolling_last_time = Time.time;
 				}
 			}
 
 		}
+		Debug.Log ("Move_hor: " + move_hor);
         move_ver -= gravity;
         movement.y = move_ver;
         character.Move( movement * Time.deltaTime );
