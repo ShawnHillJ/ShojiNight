@@ -104,41 +104,42 @@ public class PlayerController : MonoBehaviour
         if (character.isGrounded)
         {
 			//Jumping
-            move_ver = 0;
-			if ( Input.GetAxis ( "Jump" ) > 0 ) {
-				move_ver = jump;
-				anim.SetBool ( "IsJumping", true );
-			} 
-			else 
-			{
+            //move_ver = 0;
+			//if ( Input.GetAxis ( "Jump" ) > 0 ) {
+			//	move_ver = jump;
+			//	anim.SetBool ( "IsJumping", true );
+			//} 
+			//else 
+		//	{
 				anim.SetBool ( "IsJumping", false );
-			}
+		///	}
 			//Dashing
 			if ( Input.GetAxis ( "Dash" ) > 0 ) {
 
 				if ( Time.time - rolling_last_time > rolling_cooldown_time ) {
 					if ( move_fwd == 1 ) {
 						
-						movement.z += 100;
+						movement.z -= 100;
 						
 
 					} else if ( move_fwd == -1 ) {
 
 
 
-						movement.z -= 100;
+						movement.z += 100;
 						
 					} else if ( move_hor == 1 ) {
 					
-						movement.x += 100;
-					} else if ( move_hor == -1 ) {
 						movement.x -= 100;
+					} else if ( move_hor == -1 ) {
+						movement.x += 100;
 					}
 					rolling_last_time = Time.time;
 				}
 			}
 
 		}
+		Debug.Log ("Move_hor: " + move_hor);
         move_ver -= gravity;
         movement.y = move_ver;
         character.Move( movement * Time.deltaTime );
