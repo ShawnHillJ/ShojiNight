@@ -24,6 +24,9 @@ public class EnemyBehavior : MonoBehaviour
     //The player
     [HideInInspector]
     public GameObject player;
+    //The portal the enemy is linked to.  This will be set by the PortalInteract script.
+    [HideInInspector]
+    public GameObject portal;
 
     //(May need to find out a way to get it from the animator itself)
     public AnimationClip risingAnim;
@@ -64,8 +67,6 @@ public class EnemyBehavior : MonoBehaviour
     public IEnemyState selAttackState;
     //private IEnemyState selTakeDamageState;
     //private IEnemyState selDeathState;
-
-    private bool isDead;
 
     private void Awake()
     {
@@ -119,8 +120,6 @@ public class EnemyBehavior : MonoBehaviour
         //attackBox.SetActive(false);
 
         enemyState = risingState;
-
-        isDead = false;
     }
 
     // Update is called once per frame
@@ -148,17 +147,5 @@ public class EnemyBehavior : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         enemyState.OnTriggerEnter(other);
-    }
-
-    public bool IsDead
-    {
-        get
-        {
-            return isDead;
-        }
-        set
-        {
-            isDead = value;
-        }
     }
 }
