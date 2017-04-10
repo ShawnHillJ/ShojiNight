@@ -30,7 +30,8 @@ public class PlayerController : MonoBehaviour
     public AnimationClip[] attackAnim;
 
 	public Slider healthBar;
-
+	public GameObject dashObject;
+	public ParticleSystem dashParticleSystem;
     // Use this for initialization
     void Start()
     {
@@ -38,7 +39,9 @@ public class PlayerController : MonoBehaviour
         combo = 0;
         anim = GetComponent<Animator>();
         character = GetComponent<CharacterController>();
-
+		//dashObject = transform.Find ("skillAttack2").gameObject;
+		//dashParticleSystem = GetComponent<ParticleSystem> ();
+		//dashParticleSystem.Stop ();
         attackEvent = new AnimationEvent();
         //Time into the attack animation where the damage (putting up the collider/trigger) will take place.  The timing can be experimented with.
         attackEvent.time = 0.1F;
@@ -72,6 +75,7 @@ public class PlayerController : MonoBehaviour
 		{
 			playerMovement ();
 		}
+
     }
 
     void playerMovement()
@@ -118,21 +122,15 @@ public class PlayerController : MonoBehaviour
 
 				if ( Time.time - rolling_last_time > rolling_cooldown_time ) {
 					if ( move_fwd == 1 ) {
-						
-						movement.z -= 100;
-						
 
-					} else if ( move_fwd == -1 ) {
+						//transform.localPosition += transform.forward * Time.deltaTime * 6f;
+
+						transform.Translate (Vector3.forward * 1f);
+					//	dashParticleSystem.Stop ();
 
 
-
-						movement.z += 100;
-						
-					} else if ( move_hor == 1 ) {
+						//movement.z -= 100;
 					
-						movement.x -= 100;
-					} else if ( move_hor == -1 ) {
-						movement.x += 100;
 					}
 					rolling_last_time = Time.time;
 				}
