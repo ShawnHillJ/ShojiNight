@@ -80,7 +80,7 @@ public class TakeDamageState : IEnemyState
     public void ToDeathState()
     {
         //Debug.Log("Dying...");
-        enemy.IsDead = true;
+        enemy.portal.GetComponent<PortalInteract>().EnemyDeathUpdate();
         enemy.enemyAnim.SetTrigger("dead");
         enemy.GetComponent<CapsuleCollider>().enabled = false;
         //enemy.charController.detectCollisions isn't working properly...

@@ -13,6 +13,8 @@ public class PortalInteract : MonoBehaviour
     private bool inPortalRange;
     //Are all of the enemies dead?
     private bool allEnemiesDead;
+    //Number of dead enemies.
+    private int deadEnemyNum;
 
     //A prefab of a button prompt
     public GameObject buttonPrefab;
@@ -23,18 +25,22 @@ public class PortalInteract : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        //Checks that each member of enemies has the EnemyBehavior script.  Debug purposes.
         for (int i = 0; i < enemies.Length; i++)
         {
+            //Checks that each member of enemies has the EnemyBehavior script.  Debug purposes.
             EnemyBehavior temp = enemies[i].GetComponent<EnemyBehavior>();
             if (temp == null)
             {
                 Debug.Log(enemies[i] + " does not have enemy behavior script.");
             }
+            else
+            {
+                temp.portal = gameObject;
+            }
         }
 
         ePrompt = Instantiate(buttonPrefab) as GameObject;
-        ePrompt.transform.parent = GameObject.Find("ButtonPrompts").transform;
+        ePrompt.transform.SetParent(GameObject.Find("ButtonPrompts").transform);
         ePrompt.SetActive(false);
 
         inPortalRange = false;
@@ -43,12 +49,14 @@ public class PortalInteract : MonoBehaviour
 	
 	void Update ()
     {
-        //If the player presses E and the conditions are met, the enemies will be destroyed.
-		if (Input.GetKeyDown(KeyCode.E))
+        if(allEnemiesDead && inPortalRange)
         {
-            if (inPortalRange && allEnemiesDead)
+            //Makes the "E" prompt hover over the portal regardless of camera position.
+            ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up);
+
+            //If the player presses E and the conditions are met, the enemies will be destroyed.
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("Destroying enemies");
                 for (int i = 0; i < enemies.Length; i++)
                 {
                     //For now.
@@ -56,27 +64,22 @@ public class PortalInteract : MonoBehaviour
                 }
             }
         }
-        if(inPortalRange)
-        {
-            //Makes the "E" prompt hover over the portal regardless of camera position.
-            ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up);
-        }
 	}
 
+    //When the player gets close to the portal
     void OnTriggerEnter (Collider other)
     {
-        //Debug.Log("Entering portal zone");
         if (other.tag.Equals("Player"))
         {
             inPortalRange = true;
-            ePrompt.SetActive(true);
-        }
-        if(!allEnemiesDead)
-        {
-            CheckEnemyDeaths();
+            if (allEnemiesDead)
+            {
+                ePrompt.SetActive(true);
+            }
         }
     }
 
+    //When the player moves away from the portal
     void OnTriggerExit(Collider other)
     {
         if(other.tag.Equals("Player"))
@@ -87,24 +90,21 @@ public class PortalInteract : MonoBehaviour
         }
     }
 
-    //Checks all enemies in enemies to see if any are still alive.  If not, allEnemiesDead is set to true.
-    void CheckEnemyDeaths()
+    //A "reporter" function that the enemies can call when they die
+    public void EnemyDeathUpdate()
     {
-        bool enemiesDeadTemp = true;
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (!enemies[i].GetComponent<EnemyBehavior>().IsDead)
-            {
-                //Debug.Log("Enemy still alive");
-                enemiesDeadTemp = false;
-            }
-        }
-        allEnemiesDead = enemiesDeadTemp;
+        deadEnemyNum += 1;
 
-        //Changes the text color of the "E"
-        if(allEnemiesDead)
+        //When all the enemies are dead, the player will be able to press E to remove them.
+        //Also makes the "E" prompt appear if the player is close to the portal.
+        if (deadEnemyNum >= enemies.Length)
         {
-            ePrompt.GetComponent<UnityEngine.UI.Text>().color = Color.white;
+            allEnemiesDead = true;
+            
+            if(inPortalRange)
+            {
+                ePrompt.SetActive(true);
+            }
         }
     }
 }
