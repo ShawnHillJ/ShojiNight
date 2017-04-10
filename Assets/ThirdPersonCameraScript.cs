@@ -27,15 +27,15 @@ public class ThirdPersonCameraScript : MonoBehaviour {
 
 	private void Update()
 	{
-		//currentX += Input.GetAxis ("Mouse X");
-		//currentY += Input.GetAxis ("Mouse Y");
+		currentX += Input.GetAxis ("Mouse Y");
+		currentY += Input.GetAxis ("Mouse X");
 
 		//currentY = Mathf.Clamp (currentY, Y_ANGLE_MIN, Y_ANGLE_MAX);
 	}
 
 	private void LateUpdate()
 	{
-		Vector3 dir = new Vector3 (0, 5, distance);
+		Vector3 dir = new Vector3 (1, 2, distance);
 		Quaternion rotation = Quaternion.Euler (currentX, currentY, 0);
 		camTransform.position = lookAt.position + rotation * dir;
 		camTransform.LookAt (lookAt.position);
