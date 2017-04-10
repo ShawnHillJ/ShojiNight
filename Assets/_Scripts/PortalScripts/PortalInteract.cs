@@ -15,6 +15,8 @@ public class PortalInteract : MonoBehaviour
     private bool allEnemiesDead;
     //Number of dead enemies.
     private int deadEnemyNum;
+    //Is the portal activated and pulling enemies in?
+    private bool isActivated;
 
     //A prefab of a button prompt
     public GameObject buttonPrefab;
@@ -49,19 +51,52 @@ public class PortalInteract : MonoBehaviour
 	
 	void Update ()
     {
-        if(allEnemiesDead && inPortalRange)
+        if( allEnemiesDead && inPortalRange && !isActivated )
         {
             //Makes the "E" prompt hover over the portal regardless of camera position.
-            ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + Vector3.up);
+            ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint( transform.position + Vector3.up );
 
             //If the player presses E and the conditions are met, the enemies will be destroyed.
-            if (Input.GetKeyDown(KeyCode.E))
+            if ( Input.GetKeyDown( KeyCode.E ) )
             {
-                for (int i = 0; i < enemies.Length; i++)
+                for ( int i = 0; i < enemies.Length; i++ )
                 {
                     //For now.
-                    Destroy(enemies[i]);
+                    ePrompt.SetActive( false );
+                    isActivated = true;
+                    //Destroy(enemies[i]);
                 }
+            }
+        }
+
+        //If the player has pressed E to activate the portal, the enemies will be sucked in.
+        if(isActivated)
+        {
+            //Checks if there are enemies that haven't been absorbed by the portal.
+            bool allEnemiesToExp = true;
+
+            for ( int i = 0; i < enemies.Length; i++ )
+            {
+                if ( enemies[i].activeSelf )
+                {
+                    allEnemiesToExp = false;
+
+                    //Moves enemies towards the portal.
+                    float step = Time.deltaTime;
+                    enemies[i].transform.position = Vector3.MoveTowards(enemies[i].transform.position, transform.position, step);
+
+                    //Once an enemy is close enough to the portal, the enemy is deactivated.
+                    if ((enemies[i].transform.position - transform.position).magnitude < Mathf.Abs(0.1F))
+                    {
+                        //A player experience gain function can go here.
+                        enemies[i].SetActive(false);
+                    }
+                }
+            }
+            //Once the portal has destroyed all of the enemies, this script will be deactivated.
+            if ( allEnemiesToExp )
+            {
+                this.enabled = false;
             }
         }
 	}
@@ -72,7 +107,7 @@ public class PortalInteract : MonoBehaviour
         if (other.tag.Equals("Player"))
         {
             inPortalRange = true;
-            if (allEnemiesDead)
+            if (allEnemiesDead && !isActivated)
             {
                 ePrompt.SetActive(true);
             }
