@@ -140,6 +140,8 @@ public class PlayerController : MonoBehaviour
 
 		}
 		Debug.Log ("Move_hor: " + move_hor);
+		Debug.Log ("Move_fwd: " + move_fwd);
+
         move_ver -= gravity;
         movement.y = move_ver;
         character.Move( movement * Time.deltaTime );
