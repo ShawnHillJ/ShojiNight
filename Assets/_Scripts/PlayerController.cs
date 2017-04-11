@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private float last_attack;
 	private float rolling_last_time;
     private int combo;
-	private GameObject dashObject;
+	//private GameObject dashObject;
 	private CharacterController character;
 	private Animator anim;
 
@@ -169,19 +169,20 @@ public class PlayerController : MonoBehaviour
     void playerAttack()
     {
 		if (combo == 0)
-		if (Input.GetButtonDown ("Fire1")) {
-			singleAttack ();
-		} else {
-			anim.SetBool ("IsAttacking", false);
-		}
-		else if ((Time.time - last_attack) < combo_end_time) {
+
 			if (Input.GetButtonDown ("Fire1")) {
-				//Change this 
 				singleAttack ();
+			} else {
+				anim.SetBool ("IsAttacking", false);
 			}
-		} else {
-			combo = 0;
-		}
+			else if ((Time.time - last_attack) < combo_end_time) {
+				if (Input.GetButtonDown ("Fire1")) {
+					//Change this 
+					singleAttack ();
+				}
+			} else {
+				combo = 0;
+			}
 	}
     void singleAttack()
     {
