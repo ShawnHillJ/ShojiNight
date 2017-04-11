@@ -24,9 +24,14 @@ public class PortalInteract : MonoBehaviour
     //GameObject that will indicate when the player can press E to activate the portal.
     private GameObject ePrompt;
 
+	//Particle system for ground notification effect
+	public GameObject groundEffect;
+
 	// Use this for initialization
 	void Start ()
     {
+		groundEffect.SetActive(false);
+
         for (int i = 0; i < enemies.Length; i++)
         {
             //Checks that each member of enemies has the EnemyBehavior script.  Debug purposes.
@@ -51,7 +56,7 @@ public class PortalInteract : MonoBehaviour
 	
 	void Update ()
     {
-        if( allEnemiesDead && inPortalRange && !isActivated )
+        if( allEnemiesDead && !isActivated )
         {
             //Makes the "E" prompt hover over the portal regardless of camera position.
             ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint( transform.position + Vector3.up );
@@ -65,6 +70,7 @@ public class PortalInteract : MonoBehaviour
                     ePrompt.SetActive( false );
                     isActivated = true;
                     //Destroy(enemies[i]);
+					groundEffect.SetActive(true);
                 }
             }
         }
@@ -83,10 +89,10 @@ public class PortalInteract : MonoBehaviour
 
                     //Moves enemies towards the portal.
                     float step = Time.deltaTime;
-                    enemies[i].transform.position = Vector3.MoveTowards(enemies[i].transform.position, transform.position, step);
+                    enemies[i].transform.position = Vector3.MoveTowards(enemies[i].transform.position, groundEffect.transform.position, step);
 
                     //Once an enemy is close enough to the portal, the enemy is deactivated.
-                    if ((enemies[i].transform.position - transform.position).magnitude < Mathf.Abs(0.1F))
+                    if ((enemies[i].transform.position - groundEffect.transform.position).magnitude < Mathf.Abs(0.1F))
                     {
                         //A player experience gain function can go here.
                         enemies[i].SetActive(false);
@@ -98,6 +104,8 @@ public class PortalInteract : MonoBehaviour
             {
                 this.enabled = false;
             }
+
+
         }
 	}
 
