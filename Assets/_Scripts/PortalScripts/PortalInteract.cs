@@ -18,6 +18,7 @@ public class PortalInteract : MonoBehaviour
     //Is the portal activated and pulling enemies in?
     private bool isActivated;
 
+
     //A prefab of a button prompt
     public GameObject buttonPrefab;
 
@@ -30,6 +31,7 @@ public class PortalInteract : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+		//Deactivate groundportal on start
 		groundEffect.SetActive(false);
 
         for (int i = 0; i < enemies.Length; i++)
@@ -70,6 +72,7 @@ public class PortalInteract : MonoBehaviour
                     ePrompt.SetActive( false );
                     isActivated = true;
                     //Destroy(enemies[i]);
+					//Turn ground portal on
 					groundEffect.SetActive(true);
                 }
             }
@@ -87,11 +90,11 @@ public class PortalInteract : MonoBehaviour
                 {
                     allEnemiesToExp = false;
 
-                    //Moves enemies towards the portal.
+                    //Moves enemies towards the ground portal.
                     float step = Time.deltaTime;
                     enemies[i].transform.position = Vector3.MoveTowards(enemies[i].transform.position, groundEffect.transform.position, step);
 
-                    //Once an enemy is close enough to the portal, the enemy is deactivated.
+                    //Once an enemy is close enough to the groundportal, the enemy is deactivated.
                     if ((enemies[i].transform.position - groundEffect.transform.position).magnitude < Mathf.Abs(0.1F))
                     {
                         //A player experience gain function can go here.
@@ -102,7 +105,9 @@ public class PortalInteract : MonoBehaviour
             //Once the portal has destroyed all of the enemies, this script will be deactivated.
             if ( allEnemiesToExp )
             {
-                this.enabled = false;
+				
+					this.enabled = false;
+				
             }
 
 
