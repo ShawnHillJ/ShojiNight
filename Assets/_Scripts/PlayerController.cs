@@ -6,32 +6,36 @@ using System.Linq;
 public class PlayerController : MonoBehaviour
 {
 
-    public float health = 100f;
 
-    public float attack = 10f;
-    public float defense = 10f;
-    public float combo_end_time = 0.5f;
-	public float rolling_cooldown_time = 0.5f;
     private float last_attack;
 	private float rolling_last_time;
     private int combo;
+	private GameObject dashObject;
+	private CharacterController character;
+	private Animator anim;
 
+	public float move_fwd;
+	public float move_hor;
+	public float health = 100f;
+	public float attack = 10f;
+	public float defense = 10f;
+	public float combo_end_time = 0.5f;
+	public float rolling_cooldown_time = 0.5f;
     public float gravity = 3f;
     public float speed = 3.0f;
     public float turn = 0.5f;
     public float jump = 30f;
+	public float move_ver = 0f;
+	public AnimationClip[] attackAnim;
+	public Slider healthBar;
 
-    public float move_ver = 0f;
 
-    private CharacterController character;
-    private Animator anim;
+
+
     AnimationEvent attackEvent;
     GameObject attackBox;
-    public AnimationClip[] attackAnim;
 
-	public Slider healthBar;
-	public GameObject dashObject;
-	public ParticleSystem dashParticleSystem;
+
     // Use this for initialization
     void Start()
     {
@@ -39,9 +43,6 @@ public class PlayerController : MonoBehaviour
         combo = 0;
         anim = GetComponent<Animator>();
         character = GetComponent<CharacterController>();
-		//dashObject = transform.Find ("skillAttack2").gameObject;
-		//dashParticleSystem = GetComponent<ParticleSystem> ();
-		//dashParticleSystem.Stop ();
         attackEvent = new AnimationEvent();
         //Time into the attack animation where the damage (putting up the collider/trigger) will take place.  The timing can be experimented with.
         attackEvent.time = 0.1F;
@@ -82,8 +83,8 @@ public class PlayerController : MonoBehaviour
     {
 		//bool rolling = false;
         //Controls are relative to camera
-        float move_fwd = Input.GetAxis( "Vertical" );
-        float move_hor = Input.GetAxis( "Horizontal" );
+        move_fwd = Input.GetAxis( "Vertical" );
+        move_hor = Input.GetAxis( "Horizontal" );
 
         //Convert from camera-centered coordinates to fixed space-coordinates
         float fixed_x = Camera.main.transform.forward.x * move_fwd + Camera.main.transform.right.x * move_hor;
@@ -121,15 +122,17 @@ public class PlayerController : MonoBehaviour
 			if ( Input.GetAxis ( "Dash" ) > 0 ) {
 
 				if ( Time.time - rolling_last_time > rolling_cooldown_time ) {
-					if ( move_fwd == 1 ) {
+					if (move_fwd == 1 || move_hor == 1 || move_hor == -1) {
 
 						//transform.localPosition += transform.forward * Time.deltaTime * 6f;
 
-						transform.Translate (Vector3.forward * 1f);
-					//	dashParticleSystem.Stop ();
+						transform.Translate (Vector3.forward * 10f);
+						//rb.AddForce(transform.forward * dash);
+						//	dashParticleSystem.Stop ();
 
 
 						//movement.z -= 100;
+					
 					
 					}
 					rolling_last_time = Time.time;
