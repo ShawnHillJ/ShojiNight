@@ -11,13 +11,14 @@ public class TakeDamageState : IEnemyState
 
     private float timeDamaged;
     private float takeDamageClipLength;
-
+	public ParticleSystem bloodSmoke;
     //The direction and speed which the enemy will be knocked back.
     public Vector3 knockbackDir;
     public float knockbackSpeed;
 
     public TakeDamageState(EnemyBehavior newEnemy)
     {
+		
         //Debug.Log("Health: " + maleGhostEnemy.Health);
         enemy = newEnemy;
         //enemy = maleGhostEnemy;
@@ -27,6 +28,12 @@ public class TakeDamageState : IEnemyState
 
     public void UpdateState()
     {
+		bloodSmoke = enemy.GetComponentInChildren<ParticleSystem> ();
+
+		Debug.Log ("Taking damage");
+
+
+
         if (enemy.health <= 0)
         {
             ToDeathState();
@@ -36,11 +43,14 @@ public class TakeDamageState : IEnemyState
             if(knockbackSpeed > 0.1)
             {
                 enemy.charController.Move(knockbackDir.normalized * knockbackSpeed * Time.deltaTime);
+
             }
             timeDamaged += Time.deltaTime;
 
             if (timeDamaged > takeDamageClipLength)
             {
+				bloodSmoke.Play ();
+
                 Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
                 if (moveDirection.magnitude > enemy.attackDistance)
                 {

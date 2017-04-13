@@ -5,7 +5,7 @@ using System;
 
 public class EnemyBehavior : MonoBehaviour
 {
-
+	
     //Enemy's health
     public int health;
     //The speed at which the enemy will chase the player.
