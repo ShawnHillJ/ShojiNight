@@ -126,6 +126,7 @@ public class EnemyBehavior : MonoBehaviour
     void Update()
     {
         enemyState.UpdateState();
+		//Debug.Log (transform.position);
     }
 
     //Attach to animation itself?

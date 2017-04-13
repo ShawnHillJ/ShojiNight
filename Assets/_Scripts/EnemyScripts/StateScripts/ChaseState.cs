@@ -17,8 +17,14 @@ public class ChaseState : IEnemyState
     {
         //Rotates the enemy to face the player
         //y component isn't affected by player to prevent the enemy from turning at weird angles when the player jumps.
-        Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
-        enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
+        //Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
+		Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, 0, enemy.player.transform.position.z - enemy.transform.position.z);
+		//Debug.Log ("before " + enemy.transform.rotation);
+		enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
+		Debug.Log ("enemy" + enemy.transform.position);
+		Debug.Log ("player" + enemy.player.transform.position);
+		Debug.Log ("moveDirection" + moveDirection);
+		//Debug.Log ("after" + enemy.transform.rotation);
 
         //Attacks if the player is close enough
         if (moveDirection.magnitude < enemy.attackDistance)

@@ -17,8 +17,7 @@ public class PortalInteract : MonoBehaviour
     private int deadEnemyNum;
     //Is the portal activated and pulling enemies in?
     private bool isActivated;
-	//Blood effects
-	private ParticleSystem bloodSmoke;
+
 
     //A prefab of a button prompt
     public GameObject buttonPrefab;
@@ -29,9 +28,11 @@ public class PortalInteract : MonoBehaviour
 	//Particle system for ground notification effect
 	public GameObject groundEffect;
 
+
 	// Use this for initialization
 	void Start ()
     {
+		
 		//Deactivate groundportal on start
 		groundEffect.SetActive(false);
 
@@ -89,7 +90,6 @@ public class PortalInteract : MonoBehaviour
             {
                 if ( enemies[i].activeSelf )
                 {
-					//bloodSmoke = groundEffect.Find("smoke");
 
                     allEnemiesToExp = false;
 
@@ -100,8 +100,9 @@ public class PortalInteract : MonoBehaviour
                     //Once an enemy is close enough to the groundportal, the enemy is deactivated.
                     if ((enemies[i].transform.position - groundEffect.transform.position).magnitude < Mathf.Abs(0.1F))
                     {
+
+						
                         //A player experience gain function can go here.
-						//bloodSmoke.Play ();
                         enemies[i].SetActive(false);
                     }
                 }
