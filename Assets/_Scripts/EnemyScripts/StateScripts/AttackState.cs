@@ -16,8 +16,9 @@ public class AttackState : IEnemyState
 
     public void UpdateState()
     {
-        Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
-        enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
+        //Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
+		Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, 0, enemy.player.transform.position.z - enemy.transform.position.z);
+		enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
 
         if(moveDirection.magnitude > enemy.attackDistance)
         {
