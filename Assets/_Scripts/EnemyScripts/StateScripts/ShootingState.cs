@@ -11,21 +11,25 @@ public class ShootingState : IEnemyState
 
     public ShootingState(EnemyBehavior newEnemy)
     {
-        Debug.Log("Shooting State selected.");
+        //Debug.Log("Shooting State selected.");
         enemy = newEnemy;
     }
 
     public void UpdateState()
     {
-        Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
+        Vector3 enemyPos = enemy.transform.position;
+        Vector3 playerPos = enemy.player.transform.position;
+
+        //May need fixing to allow for slopes, etc.
+        Vector3 moveDirection = new Vector3( playerPos.x - enemyPos.x, 0, playerPos.z - enemyPos.z );
         enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
 
-        if (moveDirection.magnitude > enemy.attackDistance)
+        if ( Vector3.Distance( enemyPos, playerPos ) > enemy.attackDistance )
         {
             ToChaseState();
         }
         //Some values can be experimented with
-        else if (moveDirection.magnitude < enemy.attackDistance / 4)
+        else if (Vector3.Distance( enemyPos, playerPos) < enemy.attackDistance / 4)
         {
             enemy.charController.Move(-moveDirection.normalized * (enemy.chaseSpeed/4) * Time.deltaTime);
         }
