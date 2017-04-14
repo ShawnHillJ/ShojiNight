@@ -15,19 +15,22 @@ public class ChaseState : IEnemyState
     
     public void UpdateState()
     {
+        Vector3 enemyPos = enemy.transform.position;
+        Vector3 playerPos = enemy.player.transform.position;
+        
+        //May need to fix to allow for slopes, etc.
+		Vector3 moveDirection = new Vector3(playerPos.x - enemyPos.x, 0, playerPos.z - enemyPos.z);
+
+        //Debug.Log ("before " + enemy.transform.rotation);
         //Rotates the enemy to face the player
-        //y component isn't affected by player to prevent the enemy from turning at weird angles when the player jumps.
-        //Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
-		Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, 0, enemy.player.transform.position.z - enemy.transform.position.z);
-		//Debug.Log ("before " + enemy.transform.rotation);
-		enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
-		Debug.Log ("enemy" + enemy.transform.position);
+        enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
+		/*Debug.Log ("enemy" + enemy.transform.position);
 		Debug.Log ("player" + enemy.player.transform.position);
-		Debug.Log ("moveDirection" + moveDirection);
+		Debug.Log ("moveDirection" + moveDirection);*/
 		//Debug.Log ("after" + enemy.transform.rotation);
 
         //Attacks if the player is close enough
-        if (moveDirection.magnitude < enemy.attackDistance)
+        if (Vector3.Distance(enemyPos, playerPos) < enemy.attackDistance)
         {
             ToAttackState();
         }

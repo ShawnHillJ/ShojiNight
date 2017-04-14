@@ -47,12 +47,15 @@ public class TakeDamageState : IEnemyState
             }
             timeDamaged += Time.deltaTime;
 
-            if (timeDamaged > takeDamageClipLength)
+            if ( timeDamaged > takeDamageClipLength )
             {
 				bloodSmoke.Play ();
 
-                Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
-                if (moveDirection.magnitude > enemy.attackDistance)
+                Vector3 enemyPos = enemy.transform.position;
+                Vector3 playerPos = enemy.player.transform.position;
+
+                Vector3 moveDirection = new Vector3( playerPos.x - enemyPos.x, 0, playerPos.z - enemyPos.z );
+                if ( Vector3.Distance( playerPos, enemyPos ) > enemy.attackDistance )
                 {
                     ToAttackState();
                 }
@@ -90,7 +93,14 @@ public class TakeDamageState : IEnemyState
     public void ToDeathState()
     {
         //Debug.Log("Dying...");
-        enemy.portal.GetComponent<PortalInteract>().EnemyDeathUpdate();
+        if (enemy.portal != null)
+        {
+            enemy.portal.GetComponent<PortalInteract>().EnemyDeathUpdate();
+        }
+        else
+        {
+            Debug.Log("No portal has been assigned " + enemy);
+        }
         enemy.enemyAnim.SetTrigger("dead");
         enemy.GetComponent<CapsuleCollider>().enabled = false;
         //enemy.charController.detectCollisions isn't working properly...

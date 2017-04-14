@@ -98,7 +98,7 @@ public class EnemyBehavior : MonoBehaviour
         //startingState = System.Activator.CreateInstance(Type.GetType(startingStr));
         //enemyState.
         //Type startingType = Type.GetType(startingStr);
-        
+        //Debug.Log(selAttackState);
     }
 
     // Use this for initialization

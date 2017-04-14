@@ -10,7 +10,7 @@ public class AttackState : IEnemyState
 
     public AttackState(EnemyBehavior newEnemy)
     {
-        Debug.Log("Attack State selected");
+        //Debug.Log("Attack State selected");
         enemy = newEnemy;
     }
 
