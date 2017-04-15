@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
 	public bool spaceButtonDown = false;
 	public float movement;
 
-	public bool isDashing = true;
+	public bool isDashing = false;
 	public bool cooldownOfDash = true;
 
 
