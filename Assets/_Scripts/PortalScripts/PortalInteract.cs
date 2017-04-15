@@ -35,7 +35,7 @@ public class PortalInteract : MonoBehaviour
 		
 		//Deactivate groundportal on start
 		groundEffect.SetActive(false);
-
+		//Debug.Log (enemies.Length );
         for (int i = 0; i < enemies.Length; i++)
         {
             //Checks that each member of enemies has the EnemyBehavior script.  Debug purposes.
@@ -62,6 +62,7 @@ public class PortalInteract : MonoBehaviour
     {
         if( allEnemiesDead && !isActivated )
         {
+			Debug.Log ("allEnemiesDead && !isActivated");
             //Makes the "E" prompt hover over the portal regardless of camera position.
             ePrompt.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint( transform.position + Vector3.up );
 
