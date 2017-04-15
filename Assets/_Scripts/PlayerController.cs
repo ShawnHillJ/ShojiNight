@@ -28,8 +28,11 @@ public class PlayerController : MonoBehaviour
 	public float move_ver = 0f;
 	public AnimationClip[] attackAnim;
 	public Slider healthBar;
+	public bool spaceButtonDown = false;
+	public float movement;
 
-
+	public bool isDashing = true;
+	public bool cooldownOfDash = true;
 
 
     AnimationEvent attackEvent;
@@ -71,13 +74,47 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+
+		bool spaceButtonDown = Input.GetKeyDown ("space");
         playerAttack();
-		if ( !anim.GetBool ("IsAttacking") ) //Player should stop attacking
-		{
+		Debug.Log (spaceButtonDown);
+
+		if (!anim.GetBool ("IsAttacking") && !spaceButtonDown && !isDashing) {//Player should stop attacking
+			
+			
 			playerMovement ();
+			
+			
+		
+
+		
+		} else if (spaceButtonDown && cooldownOfDash) {
+
+			Debug.Log ("Inside of else if spaceButtonDown");
+
+			IEnumerator coroutine = playerDash ();
+			StartCoroutine (coroutine);
+
+		} else if (isDashing) {
+			
+			character.Move (transform.rotation * Vector3.forward * 5f * Time.deltaTime);
+
 		}
 
+		
+
     }
+
+	IEnumerator playerDash()
+	{
+		cooldownOfDash = false;
+		isDashing = true;
+		yield return new WaitForSeconds (1f);
+		isDashing = false;
+		yield return new WaitForSeconds (1f);
+		cooldownOfDash = true;
+		Debug.Log ("Working playerDash()");
+	}
 
     void playerMovement()
     {
@@ -119,32 +156,38 @@ public class PlayerController : MonoBehaviour
 				anim.SetBool ( "IsJumping", false );
 		///	}
 			//Dashing
-			if ( Input.GetAxis ( "Dash" ) > 0 ) {
+			/*
+			if (Time.time - rolling_last_time > rolling_cooldown_time) {
+			if (move_fwd == 1 || move_hor == 1 || move_hor == -1) {
+			if (Input.GetAxis ("Dash") > 0) {
 
-				if ( Time.time - rolling_last_time > rolling_cooldown_time ) {
-					if (move_fwd == 1 || move_hor == 1 || move_hor == -1) {
+				if (Time.time - rolling_last_time > rolling_cooldown_time) {
+					//if (move_fwd == 1 || move_hor == 1 || move_hor == -1) {
 
-						//transform.localPosition += transform.forward * Time.deltaTime * 6f;
+				character.Move (10f * movement * Time.smoothDeltaTime);
+						//character.Move( 5f * movement * Time.deltaTime );
+						rolling_last_time = Time.time;
 
-						transform.Translate (Vector3.forward * 10f);
-						//rb.AddForce(transform.forward * dash);
-						//	dashParticleSystem.Stop ();
-
-
-						//movement.z -= 100;
 					
 					
-					}
-					rolling_last_time = Time.time;
+				//	}
+				//}
+			} else {
+
+				character.Move( movement * Time.deltaTime );
+
+			
+			
 				}
-			}
 
-		}
-		Debug.Log ("Move_hor: " + move_hor);
-		Debug.Log ("Move_fwd: " + move_fwd);
+		}*/
 
-        move_ver -= gravity;
-        movement.y = move_ver;
+
+		//Debug.Log ("Move_hor: " + move_hor);
+	//	Debug.Log ("Move_fwd: " + move_fwd);
+
+        //move_ver -= gravity;
+       // movement.y = move_ver;
         character.Move( movement * Time.deltaTime );
     }
    /* GameObject[] ClosestEnemies ()
@@ -157,7 +200,7 @@ public class PlayerController : MonoBehaviour
         return targets;
     }*/
 
-
+	}
 
 
     IEnumerator PlayerMeleeTest()
