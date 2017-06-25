@@ -2,28 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackState : IEnemyState
+public class WimpOutState : IEnemyState
 {
-    //This is a basic melee attack state.  As long as the player is within range, the enemy will keep attacking.
+    //In this state, the enemy will back away from the player until the wimp out time runs out or the enemy is damaged again.
 
     private EnemyBehavior enemy;
 
-    public AttackState(EnemyBehavior newEnemy)
+    //How long has the enemy wimped out since the last hit
+    private float timeWimpedOut;
+    private float wimpOutTime;
+
+
+    public WimpOutState(EnemyBehavior newEnemy)
     {
-        //Debug.Log("Attack State selected");
         enemy = newEnemy;
+        wimpOutTime = enemy.wimpOutTime;
     }
 
     public void UpdateState()
     {
-        //Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, enemy.transform.position.y, enemy.player.transform.position.z - enemy.transform.position.z);
-		Vector3 moveDirection = new Vector3(enemy.player.transform.position.x - enemy.transform.position.x, 0, enemy.player.transform.position.z - enemy.transform.position.z);
-		enemy.transform.rotation = Quaternion.LookRotation(moveDirection);
+        Vector3 enemyPos = enemy.transform.position;
+        Vector3 playerPos = enemy.player.transform.position;
 
-        if(moveDirection.magnitude > enemy.attackDistance)
+        //May need to fix to allow for slopes, etc.
+        Vector3 moveDirection = -(new Vector3(playerPos.x - enemyPos.x, 0, playerPos.z - enemyPos.z));
+
+        //Rotates the enemy to face away from the player
+        enemy.transform.rotation = Quaternion.LookRotation(-moveDirection);
+
+        //Enemy will back away from the player.
+        enemy.charController.Move(moveDirection.normalized * enemy.chaseSpeed * Time.deltaTime);
+
+        //After the enemy has wimped out for so long, it will return to chasing the player.
+        if (timeWimpedOut > wimpOutTime)
         {
             ToChaseState();
         }
+        timeWimpedOut += Time.deltaTime;
     }
 
     //Checks if the enemy should be taking damage.
@@ -54,20 +69,21 @@ public class AttackState : IEnemyState
 
     public void ToChaseState()
     {
-        enemy.enemyAnim.SetBool("isAttacking", false);
+        Debug.Log("TO CHASE STATE!");
+        timeWimpedOut = 0F;
         enemy.enemyAnim.SetBool("isChasing", true);
         enemy.enemyState = enemy.chaseState;
     }
 
     public void ToAttackState()
     {
-        Debug.Log("Already attacking...");
     }
 
     public void ToTakeDamageState()
     {
-        enemy.enemyAnim.SetBool("isAttacking", false);
+        enemy.enemyAnim.SetBool("isChasing", false);
         enemy.enemyAnim.SetTrigger("takeDamage");
+        timeWimpedOut = 0f;
         enemy.enemyState = enemy.takeDamageState;
     }
 

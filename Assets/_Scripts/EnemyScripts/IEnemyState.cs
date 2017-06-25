@@ -15,4 +15,6 @@ public interface IEnemyState
     void ToTakeDamageState();
 
     void ToDeathState();
+
+    void ToWimpOutState();
 }

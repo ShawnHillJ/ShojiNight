@@ -82,6 +82,9 @@ public class ShootingState : IEnemyState
 
     public void ToDeathState()
     {
+    }
 
+    public void ToWimpOutState()
+    {
     }
 }

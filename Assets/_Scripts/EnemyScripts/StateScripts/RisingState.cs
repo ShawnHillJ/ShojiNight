@@ -45,12 +45,14 @@ public class RisingState : IEnemyState
 
     public void ToTakeDamageState()
     {
-
     }
 
     public void ToDeathState()
     {
+    }
 
+    public void ToWimpOutState()
+    {
     }
 }
 

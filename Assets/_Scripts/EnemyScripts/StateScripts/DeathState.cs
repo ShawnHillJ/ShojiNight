@@ -68,5 +68,9 @@ public class DeathState : IEnemyState
     {
         Debug.Log("Already dying...");
     }
+
+    public void ToWimpOutState()
+    {
+    }
 }
 

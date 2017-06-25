@@ -47,7 +47,7 @@ public class GhostEnemyController : MonoBehaviour
         charController = GetComponent<CharacterController>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-        attackBox = transform.FindChild("EnemyMeleeAttack").gameObject;
+        attackBox = transform.Find("EnemyMeleeAttack").gameObject;
         attackBox.SetActive(false);
 
         //The "ghost" will perform its "rising from ground" animation

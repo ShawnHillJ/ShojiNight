@@ -91,4 +91,8 @@ public class ChaseState : IEnemyState
     public void ToDeathState()
     {
     }
+
+    public void ToWimpOutState()
+    {
+    }
 }

@@ -5,6 +5,7 @@ using System;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    //NOTE: For now, the wimpOutState is reusing the chase animations.
 	
     //Enemy's health
     public int health;
@@ -14,6 +15,11 @@ public class EnemyBehavior : MonoBehaviour
     public float attackDistance;
     //The amount of damage a ranged attack from this enemy causes - not needed for melee
     public int rangedAttackDamage;
+
+    //Time the enemy will wimp out for
+    public int wimpOutTime;
+    //The percent chance an enemy has to wimp out
+    public int wimpOutPercentChance;
 
     //Enemy's Animator component
     [HideInInspector]
@@ -57,6 +63,8 @@ public class EnemyBehavior : MonoBehaviour
     [HideInInspector]
     public TakeDamageState takeDamageState;
     [HideInInspector]
+    public WimpOutState wimpOutState;
+    [HideInInspector]
     public DeathState deathState;
 
     public int attackStateSelection;
@@ -81,6 +89,7 @@ public class EnemyBehavior : MonoBehaviour
         chaseState = new ChaseState(this);
         //attackState = new AttackState(this);
         takeDamageState = new TakeDamageState(this);
+        wimpOutState = new WimpOutState(this);
         deathState = new DeathState(this);
 
         if (attackStateSelection == 0)
@@ -126,7 +135,6 @@ public class EnemyBehavior : MonoBehaviour
     void Update()
     {
         enemyState.UpdateState();
-		//Debug.Log (transform.position);
     }
 
     //Attach to animation itself?

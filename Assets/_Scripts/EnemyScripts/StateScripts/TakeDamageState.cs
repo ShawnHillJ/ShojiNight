@@ -24,15 +24,12 @@ public class TakeDamageState : IEnemyState
         //enemy = maleGhostEnemy;
 
         takeDamageClipLength = enemy.takeDamageAnim.length;
+        bloodSmoke = enemy.GetComponentInChildren<ParticleSystem>();
     }
 
     public void UpdateState()
     {
-		bloodSmoke = enemy.GetComponentInChildren<ParticleSystem> ();
-
-		Debug.Log ("Taking damage");
-
-
+		//Debug.Log ("Taking damage");
 
         if (enemy.health <= 0)
         {
@@ -51,17 +48,25 @@ public class TakeDamageState : IEnemyState
             {
 				bloodSmoke.Play ();
 
-                Vector3 enemyPos = enemy.transform.position;
-                Vector3 playerPos = enemy.player.transform.position;
-
-                Vector3 moveDirection = new Vector3( playerPos.x - enemyPos.x, 0, playerPos.z - enemyPos.z );
-                if ( Vector3.Distance( playerPos, enemyPos ) > enemy.attackDistance )
+                int wimpOutDecision = Random.Range(1, 100);
+                if (wimpOutDecision > enemy.wimpOutPercentChance)
                 {
-                    ToAttackState();
+                    Vector3 enemyPos = enemy.transform.position;
+                    Vector3 playerPos = enemy.player.transform.position;
+
+                    Vector3 moveDirection = new Vector3(playerPos.x - enemyPos.x, 0, playerPos.z - enemyPos.z);
+                    if (Vector3.Distance(playerPos, enemyPos) > enemy.attackDistance)
+                    {
+                        ToAttackState();
+                    }
+                    else
+                    {
+                        ToChaseState();
+                    }
                 }
                 else
                 {
-                    ToChaseState();
+                    ToWimpOutState();
                 }
             }
         }
@@ -107,6 +112,13 @@ public class TakeDamageState : IEnemyState
         enemy.charController.detectCollisions = false;
         enemy.charController.enabled = false;
         enemy.enemyState = enemy.deathState;
+    }
+
+    public void ToWimpOutState()
+    {
+        timeDamaged = 0F;
+        enemy.enemyAnim.SetBool("isChasing", true);
+        enemy.enemyState = enemy.wimpOutState;
     }
 }
 
